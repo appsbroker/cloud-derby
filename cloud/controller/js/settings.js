@@ -25,7 +25,7 @@ module.exports = {
   BALLS_NEEDED: 3,
   
   // Diameter of the ball
-  BALL_SIZE_MM: 60.64,
+  BALL_SIZE_MM: 70,
   
   // Width of the Home Base sign (letter size is 216mm, but the letter is not printed on 100% of the paper)
   HOME_WIDTH_MM: 200,
@@ -41,7 +41,7 @@ module.exports = {
   
   // Distance from the camera to the ball in a fully captured position - this is defined by the location of the
   // camera when it is mounted on the ball gripper
-  MIN_DISTANCE_TO_CAMERA_MM: 21,
+  MIN_DISTANCE_TO_CAMERA_MM: 40,
   
   // Max car speed (wheel rotation degrees per second)
   MAX_SPEED: 1000,
