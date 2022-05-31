@@ -33,15 +33,15 @@ set -u # This prevents running the script if any of the variables have not been 
 set -e # Exit if error is detected during pipeline execution
 
 ### Domain name
-DOMAIN="cloudderby.io"
+DOMAIN="cloudderby.com"
 
 ### Camera resolution
 export HORIZONTAL_RESOLUTION_PIXELS="1024"
 export VERTICAL_RESOLUTION_PIXELS="576"
 
 ### Demo project with the inference VM running at all times for use by anyone
-export DEMO_PROJECT="robot-derby-demo-1"
-export DEMO_INFERENCE_IP_NAME="ml-static-ip-47"
+export DEMO_PROJECT="cloud-derby-master"
+export DEMO_INFERENCE_IP_NAME="ml-static-ip-50"
 
 ### This is the project that hosts reference images and other admin elements
 ADMIN_PROJECT_ID="administration-203923"

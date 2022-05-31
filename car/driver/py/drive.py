@@ -350,7 +350,7 @@ if __name__ == '__main__':
 
                     # Only process commands that were received after time of startup.
                     # We should only be processing commands when we haven't sent any data
-                    if(command_timestamp>=startup_time):
+                    if(int(command_timestamp)>=startup_time):
                         action_type = str(action[1])
                         action_value = action[2]
                         if (action_type == "driveForwardMm"):

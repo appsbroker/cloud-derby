@@ -70,8 +70,8 @@ fi
 export VERSION=50
 
 ### These are Region and Zone where you want to run your car controller - feel free to change as you see fit
-export REGION="europe-west4"
-export ZONE="europe-west4-a"
+export REGION="europe-west1"
+export ZONE="europe-west1-b"
 export REGION_LEGACY="europe-west" # there are corner cases where gcloud still references the legacy nomenclature
 
 echo "setenv-local.sh: done"

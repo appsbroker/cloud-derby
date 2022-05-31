@@ -54,9 +54,9 @@ class RobotDerbyCar(easygopigo3.EasyGoPiGo3):
         self.BLUE = (0, 0, 255)
 
         # Settings for cars in US Reston Office (these grippers were built differently)
-        self.CONST_GRIPPER_FULL_OPEN = 90
+        self.CONST_GRIPPER_FULL_OPEN = 140
         self.CONST_GRIPPER_FULL_CLOSE = 0
-        self.CONST_GRIPPER_GRAB_POSITION = 40
+        self.CONST_GRIPPER_GRAB_POSITION = 120
         
         # Settings for cars in London Office (default method of assembly for grippers)
         #self.CONST_GRIPPER_FULL_OPEN = 180

@@ -38,7 +38,7 @@ from flask import jsonify
 import numpy as np
 from PIL import Image
 from PIL import ImageDraw
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 from utils import label_map_util
 from werkzeug.datastructures import CombinedMultiDict
 from wtforms import Form
