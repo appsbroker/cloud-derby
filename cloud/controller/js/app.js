@@ -73,6 +73,15 @@ require('@google-cloud/debug-agent').start({allowExpressions: true});
 // Color of the ball that this car controller will be after. It can be changed via control panel at run time
 let ballColor = "unknown";
 
+// Speed of the car. It can be changed via control panel at run time
+let FORM_MAX_SPEED = "50";
+
+global.MAX_SPEED = "50";
+global.TURN_SPEED = MAX_SPEED / 10;
+// Many GoPiGo motors are driving at different speed causing left and right motor to skew the car when driven at max,
+// hence we reduce the max speed
+global.DRIVE_SPEED = MAX_SPEED / 3;
+
 /************************************************************
  Keeping track of stats
  ************************************************************/
@@ -287,6 +296,29 @@ function changeColorForm() {
     <input type="radio" name="ball_color" value="Yellow"> Yellow<br><br>
     <input type="submit" name="change_color" value="Submit"></form>`;
 }
+
+/************************************************************
+ Change speed form
+ ************************************************************/
+function changeSpeedForm() {
+    return `<a href="/">Home</a>
+      <h1>Change speed of robot</h1>
+      <form action="/speed_change_submit" method="post">
+      <br>
+      <label for="speed">New speed for car to move at:</label><br>
+      <input type="radio" name="speed" value="50"> 50<br>
+      <input type="radio" name="speed" value="100"> 100<br>
+      <input type="radio" name="speed" value="200"> 200<br>
+      <input type="radio" name="speed" value="300"> 300<br>
+      <input type="radio" name="speed" value="400"> 400<br>
+      <input type="radio" name="speed" value="500"> 500<br>
+      <input type="radio" name="speed" value="600"> 600<br>
+      <input type="radio" name="speed" value="700"> 700<br>
+      <input type="radio" name="speed" value="800"> 800<br>
+      <input type="radio" name="speed" value="900"> 900<br>
+      <input type="radio" name="speed" value="1000"> 1000<br><br>
+      <input type="submit" name="change_speed" value="Submit"></form>`;
+  }
 
 /************************************************************
  Debugger form
@@ -527,6 +559,27 @@ app.post('/color_change_submit', (req, res) => {
 });
 
 /************************************************************
+ Changing the speed of the car
+ ************************************************************/
+app.post('/speed_change_submit', (req, res) => {
+    console.log(`***${APP}.GET.speed_change_submit***`);
+
+    if (req.body.speed) {
+      FORM_MAX_SPEED = req.body.speed;
+      global.MAX_SPEED = FORM_MAX_SPEED;
+      //module.exports.MAX_SPEED = MAX_SPEED;//
+      global.TURN_SPEED = MAX_SPEED / 10;
+        // Many GoPiGo motors are driving at different speed causing left and right motor to skew the car when driven at max,
+        // hence we reduce the max speed
+      global.DRIVE_SPEED = MAX_SPEED / 3;
+      console.log("form_max_speed" + FORM_MAX_SPEED + "max_speed" + MAX_SPEED);
+    }
+
+    res.redirect('/');
+  });
+
+
+/************************************************************
  Show history of inbound messages
  ************************************************************/
 app.get('/inbound_history', (req, res) => {
@@ -553,6 +606,16 @@ app.get('/change_color', (req, res) => {
   let formPage = changeColorForm();
   res.status(200).send(formPage);
 });
+
+/************************************************************
+ Changing the speed of the car
+ ************************************************************/
+app.get('/change_speed', (req, res) => {
+    console.log(`***${APP}.GET.change_speed***`);
+
+    let formPage = changeSpeedForm();
+    res.status(200).send(formPage);
+  });
 
 /************************************************************
  Debug mode - human control over sending driving commands to the car
@@ -689,7 +752,7 @@ app.get('/stop', (req, res) => {
  ************************************************************/
 app.get('/', (req, res) => {
   console.log(`***${APP}.GET.main_page***`);
-  let html = "<h1>Cloud Derby Driving Controller</h1>" + "<p>Current driving mode: <b>" + currentDrivingMode + "</b></p>" + "<p>Set driving mode to: <a href='/self_driving_mode'>Self driving</a> / <a href='/manual_mode'>Manual</a> / <a href='/debugger_on'>Debug</a></p>" + "<p>Car color (<a href='/change_color'>change it</a>): <b>" + ballColor + "</b></p>" + "<p>Message history: <a href='/inbound_history'>Inbound sensor data</a> / <a href='/outbound_history'>Outbound driving commands</a></p>" + "<p>Errors: <b>" + totalErrors + "</b></p>" + "<p>Messages received: <b>" + totalMessagesReceived + "</b></p>" + "<p>Messages sent: <b>" + totalMessagesSent + "</b></p>" + "<p>Rejected out of order or old messages: <b>" + rejectedOutOfOrderMessages + "</b></p>" + "<p>Rejected format messages: <b>" + rejectedFormatMessages + "</b></p>" + "<p>Most recent message: <b>" + new Date(maxMsgTimeStampMs).toUTCString() + "</b></p>" + "<p>Listener status <a href='/start'>Start</a>/<a href='/stop'>Stop</a>: <b>" + listenerStatus + "</b></p>" + "<p>Statistics: <a href='/reset'>Reset</a></p>" + "<p>Command topic: <b>" + process.env.COMMAND_TOPIC + "</b></p>" + "<p>Sensor subscription: <b>" + process.env.SENSOR_SUBSCRIPTION + "</b></p>";
+  let html = "<h1>Cloud Derby Driving Controller</h1>" + "<p>Current driving mode: <b>" + currentDrivingMode + "</b></p>" + "<p>Set driving mode to: <a href='/self_driving_mode'>Self driving</a> / <a href='/manual_mode'>Manual</a> / <a href='/debugger_on'>Debug</a></p>" + "<p>Car color (<a href='/change_color'>change it</a>): <b>" + ballColor + "</b></p>" + "<p> Car Speed (<a href='/change_speed'>change it</a>): <b>" + FORM_MAX_SPEED + "</b></p>" + "<p>Message history: <a href='/inbound_history'>Inbound sensor data</a> / <a href='/outbound_history'>Outbound driving commands</a></p>" + "<p>Errors: <b>" + totalErrors + "</b></p>" + "<p>Messages received: <b>" + totalMessagesReceived + "</b></p>" + "<p>Messages sent: <b>" + totalMessagesSent + "</b></p>" + "<p>Rejected out of order or old messages: <b>" + rejectedOutOfOrderMessages + "</b></p>" + "<p>Rejected format messages: <b>" + rejectedFormatMessages + "</b></p>" + "<p>Most recent message: <b>" + new Date(maxMsgTimeStampMs).toUTCString() + "</b></p>" + "<p>Listener status <a href='/start'>Start</a>/<a href='/stop'>Stop</a>: <b>" + listenerStatus + "</b></p>" + "<p>Statistics: <a href='/reset'>Reset</a></p>" + "<p>Command topic: <b>" + process.env.COMMAND_TOPIC + "</b></p>" + "<p>Sensor subscription: <b>" + process.env.SENSOR_SUBSCRIPTION + "</b></p>";
   
   let imageUrl;
   if (inboundMsgHistory.length > 0) {

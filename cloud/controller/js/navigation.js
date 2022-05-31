@@ -26,10 +26,6 @@ const SEEK_HOME_TURN = require('./drive-message').SEEK_HOME_TURN;
 // Initialize simulation engine (it may be On or Off)
 const DriveMessageSimulator = require('./simulation').DriveMessageSimulator;
 let driveSimulation = new DriveMessageSimulator();
-const TURN_SPEED = Settings.MAX_SPEED / 10;
-// Many GoPiGo motors are driving at different speed causing left and right motor to skew the car when driven at max,
-// hence we reduce the max speed
-const DRIVE_SPEED = Settings.MAX_SPEED / 3;
 
 // Highest allowed Y coordinate of the top of the ball in the picture - if it is above this, we will discard the image
 // as false positive for low confidence result because balls should not fly in the air. Note that the coordinates of
@@ -37,9 +33,9 @@ const DRIVE_SPEED = Settings.MAX_SPEED / 3;
 const HIGH_BALL_TOP_BOUND = 0.1;
 // Even if the ball is very high and if the inference confidence score is higher than this, we will still accept this
 // as a real ball
-const HIGH_BALL_SCORE = 0.95;
+const HIGH_BALL_SCORE = 0.8;
 // Ignore all Home Base objects if confidence score is lower than this below
-const HOME_BASE_SCORE = 0.3;
+const HOME_BASE_SCORE = 0.2;
 
 /************************************************************
  Navigation class has logic for generating drive commands based on data in a sensor
@@ -320,7 +316,8 @@ module.exports = class Navigation {
    - Bounding box for the nearest object (may be undefined if object not found)
    ************************************************************/
   findNearestObject(objectType, visionResponse) {
-    console.log("findNearestObject(): Looking for an object of type <" + objectType + ">");
+    console.log("findNearestObject(): Looking for an object of type <" + objectType + ">" + "max-speed-secondary" + MAX_SPEED + "turn_speed_" + TURN_SPEED + "drive_speed_" + DRIVE_SPEED);
+
     // At the start, no object of this type is found yet, hence the size is 0
     let foundSize = 0;
     let nearestObject = undefined;
@@ -392,7 +389,7 @@ module.exports = class Navigation {
     // At this distance or closer we need to be moving slow not to kick the ball out too far
     const slowApproachZoneMm = 300;
     // We can grasp the ball within this angle spread to each side
-    const ballCaptureAngle = 11;
+    const ballCaptureAngle = 90;
     // This is how far the car will drive super slowly to make sure ball is really in the gripper
     const EXTRA_DISTANCE = 40;
     
