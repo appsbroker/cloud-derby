@@ -50,7 +50,7 @@ TRAINING_STEPS=8000
 ### This controls which inference VM REST API will be used by the Driving Controller
 #   true - use existing inference VM from the DEMO project
 #   false - use inference VM within the same project as Driving Controller
-USE_DEMO_INFERENCE="false"
+USE_DEMO_INFERENCE="true"
 
 ### Where do we want Driving Controller to be deployed? (current VM or App Engine)
 #   true - deploy in local VM
